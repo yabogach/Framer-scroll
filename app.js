@@ -78,7 +78,7 @@ for (i = j = 0; j <= 10; i = ++j) {
     x: 0,
     animationOptions: {
       curve: "ease",
-      time: 0.5
+      time: 0.3
     }
   };
   layers[i].states.stateOn = {
@@ -97,6 +97,7 @@ for (i = j = 0; j <= 10; i = ++j) {
   };
   layers[i].draggable.enabled = true;
   layers[i].draggable.vertical = false;
+  layers[i].draggable.momentum = false;
   layers[i].draggable.constraints = {
     x: -200,
     y: 215 * i,
@@ -112,7 +113,7 @@ for (i = j = 0; j <= 10; i = ++j) {
       if (this === layer) {
         crnt = i;
       }
-      if (this.x <= -200) {
+      if (this.x < -200) {
         this.animate("stateOn");
         buttons[crnt].animate("onButton");
         results.push((function() {

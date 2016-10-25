@@ -74,7 +74,7 @@ for i in [0..10]
     x: 0
     animationOptions:
       curve:"ease"
-      time: 0.5
+      time: 0.3
   layers[i].states.stateOn=
     x: -200
     animationOptions:
@@ -91,8 +91,9 @@ for i in [0..10]
 
   layers[i].draggable.enabled = true
   layers[i].draggable.vertical = false
+	layers[i].draggable.momentum = false
 
-  layers[i].draggable.constraints =
+	layers[i].draggable.constraints =
     x: -200
     y: 215 * i
     width: 750 + 200
@@ -108,7 +109,7 @@ for i in [0..10]
         crnt = i
     ####################
 
-      if this.x <= -200
+      if this.x < -200
         this.animate("stateOn")
         buttons[crnt].animate("onButton")
 
