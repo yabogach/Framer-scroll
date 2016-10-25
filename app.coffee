@@ -93,14 +93,14 @@ for i in [0..10]
   layers[i].draggable.vertical = false
 	layers[i].draggable.momentum = false
 
-	layers[i].draggable.constraints =
-    x: -200
+	###layers[i].draggable.constraints =
+    x: -300
     y: 215 * i
     width: 750 + 200
-    height: 200
+    height: 200###
 
 
-  layers[i].onDragEnd ->
+	layers[i].onDragEnd ->
 
     # Как не потерять i
     crnt = 0

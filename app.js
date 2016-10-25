@@ -98,12 +98,13 @@ for (i = j = 0; j <= 10; i = ++j) {
   layers[i].draggable.enabled = true;
   layers[i].draggable.vertical = false;
   layers[i].draggable.momentum = false;
-  layers[i].draggable.constraints = {
-    x: -200,
-    y: 215 * i,
-    width: 750 + 200,
-    height: 200
-  };
+
+  /*layers[i].draggable.constraints =
+     x: -300
+     y: 215 * i
+     width: 750 + 200
+     height: 200
+   */
   layers[i].onDragEnd(function() {
     var crnt, k, layer, len, results;
     crnt = 0;
