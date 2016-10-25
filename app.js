@@ -98,17 +98,12 @@ for (i = j = 0; j <= 10; i = ++j) {
   layers[i].draggable.enabled = true;
   layers[i].draggable.vertical = false;
   layers[i].draggable.momentum = false;
-
-  /*layers[i].draggable.constraints =
-     x: -300
-     y: 215 * i
-     width: 750 + 200
-     height: 200
-   */
+  layers[i].onDragMove(function() {
+    return scroll.scrollVertical = false;
+  });
   layers[i].onDragEnd(function() {
-    var crnt, k, layer, len, results;
+    var crnt, k, l, layer, len, len1, len2, m;
     crnt = 0;
-    results = [];
     for (i = k = 0, len = layers.length; k < len; i = ++k) {
       layer = layers[i];
       if (this === layer) {
@@ -117,38 +112,24 @@ for (i = j = 0; j <= 10; i = ++j) {
       if (this.x < -200) {
         this.animate("stateOn");
         buttons[crnt].animate("onButton");
-        results.push((function() {
-          var l, len1, results1;
-          results1 = [];
-          for (i = l = 0, len1 = layers.length; l < len1; i = ++l) {
-            layer = layers[i];
-            if (layer !== this && layer.states.current.name !== "stateDeleted") {
-              layer.animate("stateOff");
-              results1.push(buttons[i].animate("offButton"));
-            } else {
-              results1.push(void 0);
-            }
+        for (i = l = 0, len1 = layers.length; l < len1; i = ++l) {
+          layer = layers[i];
+          if (layer !== this && layer.states.current.name !== "stateDeleted") {
+            layer.animate("stateOff");
+            buttons[i].animate("offButton");
           }
-          return results1;
-        }).call(this));
+        }
       } else {
         this.animate("stateOff");
-        results.push((function() {
-          var l, len1, results1;
-          results1 = [];
-          for (i = l = 0, len1 = layers.length; l < len1; i = ++l) {
-            layer = layers[i];
-            if (layer === this) {
-              results1.push(buttons[i].animate("offButton"));
-            } else {
-              results1.push(void 0);
-            }
+        for (i = m = 0, len2 = layers.length; m < len2; i = ++m) {
+          layer = layers[i];
+          if (layer === this) {
+            buttons[i].animate("offButton");
           }
-          return results1;
-        }).call(this));
+        }
       }
     }
-    return results;
+    return scroll.scrollVertical = true;
   });
   buttons[i].onClick(function() {
     var button, crnt, k, l, len, ref, results;
@@ -182,4 +163,27 @@ for (i = j = 0; j <= 10; i = ++j) {
     }
     return results;
   });
+  layers[i].onAnimationEnd(function() {
+    return scroll.updateContent();
+  });
 }
+
+scroll.onScrollStart(function() {
+  var k, layer, len, results;
+  results = [];
+  for (k = 0, len = layers.length; k < len; k++) {
+    layer = layers[k];
+    results.push(layer.draggable.horizontal = false);
+  }
+  return results;
+});
+
+scroll.onScrollEnd(function() {
+  var k, layer, len, results;
+  results = [];
+  for (k = 0, len = layers.length; k < len; k++) {
+    layer = layers[k];
+    results.push(layer.draggable.horizontal = true);
+  }
+  return results;
+});

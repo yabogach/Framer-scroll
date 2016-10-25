@@ -21,7 +21,6 @@ scroll = new ScrollComponent
   width: Screen.width
   height: Screen.height
   scrollHorizontal: false
-  #contentInset: {top:32, bottom:32}
 
 
 buttons = []
@@ -51,7 +50,6 @@ for i in [0..10]
     animationOptions:
       curve:"ease"
       time: 0.3
-##############################
 
   image[i] = new Layer
     parent: buttons[i]
@@ -59,7 +57,7 @@ for i in [0..10]
     width: 88, height: 88
     x: Align.center
     y: Align.center
-
+#############################
 
 
 ######### LAYERS ############
@@ -88,27 +86,20 @@ for i in [0..10]
 ##############################
 
 
-
   layers[i].draggable.enabled = true
   layers[i].draggable.vertical = false
 	layers[i].draggable.momentum = false
 
-	###layers[i].draggable.constraints =
-    x: -300
-    y: 215 * i
-    width: 750 + 200
-    height: 200###
-
+	layers[i].onDragMove ->
+		scroll.scrollVertical = false
 
 	layers[i].onDragEnd ->
-
-    # Как не потерять i
     crnt = 0
     for layer, i in layers
+		  # Как не потерять i
       if this is layer
         crnt = i
-    ####################
-
+    	####################
       if this.x < -200
         this.animate("stateOn")
         buttons[crnt].animate("onButton")
@@ -117,15 +108,15 @@ for i in [0..10]
           if layer != this and layer.states.current.name != "stateDeleted"
             layer.animate("stateOff")
             buttons[i].animate("offButton")
-
       else
         this.animate("stateOff")
         for layer,i in layers
           if layer is this
             buttons[i].animate("offButton")
+					scroll.scrollVertical = true ##как так?
 
   ######## УДАЛЕНИЕ #################
-  buttons[i].onClick ->
+	buttons[i].onClick ->
     crnt = 0
     for button, i in buttons
       if this is button
@@ -147,3 +138,13 @@ for i in [0..10]
         options:
           delay: .6
           time: 0.3
+
+	layers[i].onAnimationEnd ->
+		scroll.updateContent()
+
+scroll.onScrollStart ->
+    for layer in layers
+        layer.draggable.horizontal = false
+scroll.onScrollEnd ->
+    for layer in layers
+        layer.draggable.horizontal = true
